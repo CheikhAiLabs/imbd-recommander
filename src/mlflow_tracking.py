@@ -801,6 +801,27 @@ def init_inference_tracing(tracking_uri: str | None = None, experiment_name: str
     mlflow.set_tracking_uri(uri)
     mlflow.set_experiment(experiment)
 
+    # Link traces to the registered model
+    try:
+        client = MlflowClient(tracking_uri=uri)
+        # Find latest model version
+        versions = client.search_model_versions(f"name='{REGISTERED_MODEL_NAME}'")
+        if versions:
+            latest = sorted(versions, key=lambda v: int(v.version), reverse=True)[0]
+            model_id = latest.run_id  # fallback: use run_id
+            # Try to get the logged model ID from the run artifacts
+            run = client.get_run(latest.run_id)
+            for key, value in run.data.tags.items():
+                if "model" in key.lower() and "id" in key.lower():
+                    model_id = value
+                    break
+            # Use set_active_model if available (MLflow 3.x)
+            if hasattr(mlflow, "set_active_model"):
+                mlflow.set_active_model(model_id=model_id)
+                logger.info(f"MLflow active model set: {model_id}")
+    except Exception as e:
+        logger.warning(f"Could not link traces to model: {e}")
+
     # Enable tracing
     try:
         mlflow.tracing.enable()

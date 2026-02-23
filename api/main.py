@@ -176,7 +176,7 @@ async def lifespan(app: FastAPI):
     )
 
     # Initialize MLflow for inference tracing (v3.10 Tracing API)
-    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5555")
+    tracking_uri = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:9878")
     try:
         from src.mlflow_tracking import init_inference_tracing
 

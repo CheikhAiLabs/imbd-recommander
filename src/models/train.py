@@ -85,7 +85,7 @@ def get_default_config() -> dict:
         },
         "mlflow": {
             "enabled": True,
-            "tracking_uri": os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5555"),
+            "tracking_uri": os.getenv("MLFLOW_TRACKING_URI", "http://localhost:9878"),
             "experiment_name": os.getenv("MLFLOW_EXPERIMENT_NAME", "imdb-recommender"),
         },
     }
@@ -122,12 +122,13 @@ def run_pipeline(config: dict | None = None) -> dict:
     logger.info(f"Config: {json.dumps(config, indent=2)}")
 
     # ─── MLflow Init ──────────────────────────────────────────────────────
-    mlflow_enabled = config.get("mlflow", {}).get("enabled", True)
+    mlflow_config = config.get("mlflow", {})
+    mlflow_enabled = mlflow_config.get("enabled", True)
     if mlflow_enabled:
         try:
             init_mlflow(
-                tracking_uri=config["mlflow"].get("tracking_uri"),
-                experiment_name=config["mlflow"].get("experiment_name"),
+                tracking_uri=mlflow_config.get("tracking_uri"),
+                experiment_name=mlflow_config.get("experiment_name"),
             )
             logger.info("MLflow tracking initialized")
         except Exception as e:

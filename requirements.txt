@@ -25,6 +25,9 @@ matplotlib>=3.8.0
 streamlit>=1.30.0
 streamlit-searchbox>=0.1.14
 
+# System monitoring (MLflow system metrics)
+psutil>=5.9.0
+
 # Data Validation
 pandera>=0.20.0
 

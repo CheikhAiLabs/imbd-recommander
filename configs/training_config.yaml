@@ -29,6 +29,6 @@ model:
   name: "content_recommender_v1"
 
 mlflow:
-  enabled: true
-  tracking_uri: "http://localhost:5555"    # Local dev (use env var in Docker)
-  experiment_name: "imdb-recommender"
+  enabled: true                          # Enable MLflow tracking
+  tracking_uri: "http://localhost:9878"   # MLflow server (Docker port)
+  experiment_name: "imdb-recommender"     # Experiment name in MLflow UI

@@ -29,7 +29,7 @@ from mlflow.tracking import MlflowClient
 logger = logging.getLogger(__name__)
 
 # ─── Defaults ──────────────────────────────────────────────────────────────────
-DEFAULT_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:5555")
+DEFAULT_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:9878")
 DEFAULT_EXPERIMENT = os.getenv("MLFLOW_EXPERIMENT_NAME", "imdb-recommender")
 REGISTERED_MODEL_NAME = "imdb-content-recommender"
 
@@ -116,7 +116,14 @@ def log_training_run(
       - ``mlflow.log_text``         — log text summaries
       - System metrics              — CPU / RAM automatically tracked
     """
-    with mlflow.start_run(tags=tags or {}) as run:
+    try:
+        run_context = mlflow.start_run(tags=tags or {})
+    except Exception:
+        # Fallback: disable system metrics if psutil is missing
+        logger.warning("Falling back to start_run without system metrics")
+        run_context = mlflow.start_run(tags=tags or {}, log_system_metrics=False)
+
+    with run_context as run:
         run_id = run.info.run_id
         logger.info(f"MLflow run started: {run_id}")
 

@@ -901,9 +901,24 @@ A **20+ panel** dashboard auto-provisioned on startup. Access at [localhost:9880
 - 🏷️ **Model Registry** — Registered `imdb-content-recommender` pyfunc model with inferred signature
 - 📦 **Dataset tracking** — Full training dataset logged via `mlflow.data.from_pandas` with schema & profile
 - 🔍 **Inference tracing** — Every `/recommend` and `/search` API call traced with inputs, outputs, and latency
+- ✅ **GenAI quality scoring** — Evaluate responses with MLflow scorers (e.g., `Correctness`) and track quality metrics
 - 💻 **System metrics** — CPU/RAM usage during training via `mlflow.enable_system_metrics_logging`
 - 📁 **Artifacts** — Download model files, metadata, training logs from any run
 - 🏷️ **Parameters** — Full training configuration captured as searchable params
+
+**Run scorer evaluation:**
+```bash
+# Uses a mock predict function (no external API call)
+make eval-genai
+
+# Uses OpenAI as predict function (requires OPENAI_API_KEY)
+PYTHONPATH=. python scripts/evaluate_genai.py \
+  --tracking-uri http://localhost:9878 \
+  --experiment-id 1 \
+  --provider openai \
+  --openai-model gpt-4o-mini
+```
+Default scorer set includes built-in `Correctness()` and a custom metric `expected_response_match/mean`.
 
 ---
 
@@ -1037,6 +1052,7 @@ make train          # Full training pipeline (download + train)
 make api            # Start FastAPI on port 9876
 make ui             # Start Streamlit on port 9877
 make mlflow         # Start MLflow on port 9878
+make eval-genai     # Run MLflow GenAI evaluation (Correctness scorer)
 
 # ── Docker ──
 make docker-build   # Build Docker images

@@ -16,7 +16,7 @@
 #   make all         - Full pipeline: install, train, test
 # ==============================================================================
 
-.PHONY: install download train api ui mlflow test lint format clean all help
+.PHONY: install download train api ui mlflow eval-genai test lint format clean all help
 .PHONY: docker-up docker-down docker-build docker-logs
 
 # ── Configuration ────────────────────────────────────────────────────────────
@@ -67,6 +67,13 @@ mlflow: ## Start MLflow tracking server (port $(MLFLOW_PORT))
 		--port $(MLFLOW_PORT) \
 		--backend-store-uri sqlite:///mlruns/mlflow.db \
 		--default-artifact-root ./mlartifacts
+
+eval-genai: ## Run MLflow GenAI scorer evaluation (Correctness)
+	@if [ -x .venv/bin/python ]; then \
+		PYTHONPATH=. .venv/bin/python scripts/evaluate_genai.py --tracking-uri http://localhost:$(MLFLOW_PORT) --experiment-id 1 --provider mock; \
+	else \
+		PYTHONPATH=. $(PYTHON) scripts/evaluate_genai.py --tracking-uri http://localhost:$(MLFLOW_PORT) --experiment-id 1 --provider mock; \
+	fi
 
 # ── Docker ───────────────────────────────────────────────────────────────────
 docker-build: ## Build Docker images

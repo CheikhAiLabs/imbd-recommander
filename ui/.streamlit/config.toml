@@ -1,0 +1,16 @@
+# Streamlit UI Configuration
+# Dark theme with IMDb-inspired styling
+
+[theme]
+primaryColor = "#f5c518"
+backgroundColor = "#0d1117"
+secondaryBackgroundColor = "#161b22"
+textColor = "#c9d1d9"
+font = "sans serif"
+
+[server]
+port = 8501
+headless = true
+
+[browser]
+gatherUsageStats = false

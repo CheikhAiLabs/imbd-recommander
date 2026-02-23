@@ -1,0 +1,15 @@
+# Grafana Dashboard Provisioning
+apiVersion: 1
+
+providers:
+  - name: "IMDb Recommender"
+    orgId: 1
+    folder: "IMDb Recommender"
+    type: file
+    disableDeletion: false
+    editable: true
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

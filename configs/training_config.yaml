@@ -1,0 +1,34 @@
+# ==============================================================================
+# IMDb Recommender - Training Configuration
+# ==============================================================================
+# This file controls the training pipeline behavior.
+# Modify these settings to customize data filtering, features, and model.
+
+data:
+  # Directory paths
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  
+  # Download settings
+  force_download: false          # Set true to re-download even if cached
+  include_principals: false      # Include cast/crew data (slower to process)
+
+features:
+  # Filtering criteria
+  min_votes: 500                 # Minimum number of IMDb votes
+  min_year: 1970                 # Earliest release year to include
+  
+  # Title types to include
+  title_types:
+    - movie
+    - tvSeries
+    - tvMiniSeries
+    - tvMovie
+
+model:
+  name: "content_recommender_v1"
+
+mlflow:
+  enabled: true
+  tracking_uri: "http://localhost:5555"    # Local dev (use env var in Docker)
+  experiment_name: "imdb-recommender"

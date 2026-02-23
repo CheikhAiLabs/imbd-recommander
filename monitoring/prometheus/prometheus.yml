@@ -1,0 +1,34 @@
+# ==============================================================================
+# Prometheus Configuration - IMDb Recommender
+# ==============================================================================
+# Scrapes metrics from the FastAPI recommendation service.
+
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+  scrape_timeout: 5s
+
+# ─── Alerting (optional, can extend later) ────────────────────────────────────
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets: ['alertmanager:9093']
+
+# ─── Scrape Configurations ────────────────────────────────────────────────────
+scrape_configs:
+  # ── Prometheus self-monitoring ──
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+        labels:
+          service: "prometheus"
+
+  # ── IMDb Recommender API ──
+  - job_name: "recommender-api"
+    metrics_path: "/metrics"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["api:8000"]
+        labels:
+          service: "recommender-api"
+          environment: "production"

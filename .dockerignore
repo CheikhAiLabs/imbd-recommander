@@ -1,0 +1,61 @@
+# ==============================================================================
+# .dockerignore — IMDb Recommender
+# ==============================================================================
+# Keep images lean by excluding everything unnecessary.
+
+# ── Virtual environments ─────────────────────────────────────────────────────
+.venv/
+venv/
+env/
+.env
+
+# ── Git ──────────────────────────────────────────────────────────────────────
+.git/
+.gitignore
+
+# ── Python caches ────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ── IDE / Editors ────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ── Testing & CI ─────────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.mypy_cache/
+
+# ── Raw data (too large for image, mount at runtime) ─────────────────────────
+data/raw/*.tsv
+data/raw/*.tsv.gz
+data/raw/*.md5
+
+# ── MLflow local artifacts ───────────────────────────────────────────────────
+mlruns/
+mlartifacts/
+
+# ── Monitoring configs (mounted via docker-compose volumes) ──────────────────
+monitoring/
+
+# ── Documentation ────────────────────────────────────────────────────────────
+*.md
+LICENSE
+docs/
+
+# ── Notebooks ────────────────────────────────────────────────────────────────
+notebooks/
+*.ipynb
